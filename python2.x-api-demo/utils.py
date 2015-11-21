@@ -10,18 +10,18 @@ class ApiException(Exception):
 
 # calculate the signation use private key and params
 def _verfy_ac(private_key, params):
-    print params
+    #print params
     items = params.items()
     items.sort()
-    print items
+    #print items
 
     params_data = ""
     for key, value in items:
         params_data = params_data + str(key) + str(value)
-        print params_data
+        #print params_data
 
     params_data = params_data+private_key
-    print params_data
+    #print params_data
     
     '''use sha1 to encode keys'''
     hash_new = hashlib.sha1()

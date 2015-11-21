@@ -11,8 +11,11 @@ if __name__=='__main__':
     arg_length = len(sys.argv)
     ApiClient = ApiClient(base_url, public_key, private_key)
     Parameters = {
-            "Action":"DescribeUHostInstance",
-            "Region":"cn-north-03",
+            "Action":"ResizeUHostInstance",
+            "Region":"cn-north-01",
+            "UHostId":"uhost-2oadfn",
+            "CPU":2,
+            "Memory":2048
             }
     response = ApiClient.get("/", Parameters)
     print json.dumps(response, sort_keys=True, indent=4, separators=(',', ': '))
