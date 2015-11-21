@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from utils import ApiClient
-from config import *
 import sys
+sys.path.append("..")
 import json
+from utils import ApiClient
+from config import * 
 
 if __name__=='__main__':
     arg_length = len(sys.argv)

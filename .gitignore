@@ -1,5 +1,6 @@
 # Python ignore file
 config.py
+*.pyc
 
 # vim ignore file
 # vim temple file, when the file is edited.
