@@ -1,0 +1,18 @@
+# code about all data center
+
+# Beijing BGP-A data center
+cn-north-01
+# Beijing BGP-B data center
+cn-north-02
+# Beijing BGP-C data center
+cn-north-03
+# East China dual line data center
+cn-east-01
+# South China dual line data center
+cn-south-01
+# GuangZhou BGP Data center
+cn-south-02
+# HongKong Data Center
+hk-01
+# West USA data center
+us-west-01
