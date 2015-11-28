@@ -4,7 +4,7 @@
  $ sudo apt-get install php5-cli
  $ sudo apt-get install curl libcurl3 libcurl3-dev php5-curl
  ```
- ***2、copy config.simple.php to config.php
+ ***2、copy config.simple.php to config.php***
  ```shell
  cp config.simple.php config.php
  ```
