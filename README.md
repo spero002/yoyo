@@ -100,5 +100,129 @@ http(s)://api.ucloud.cn/?Action=DescribeUHostInstance
  ProjectId  | 否   | String   | 项目ID，为空时及为默认项目
  
 ###签名算法
+签名是加在请求链接后面有认证功能的一个字符串。签名的计算需要用到用户的PublicKey和PrivateKey。其中PublicKey当作普通参数一样处理，PrivateKey是正在进行has计算之前加在计算出的字符串后面的。这里假设用户的PublicKey和PrivateKey为如下值，这两个值可以在测试代码的时候用来检验算法的正确性，如果算法正确的计算出来的Signature值应该和这个文档中计算出来的是一致的。
+```
+PublicKey  = 'ucloudsomeone@example.com1296235120854146120'
+PrivateKey = '46f09bb9fab4f12dfc160dae12273d5332b5debe'
+```
+对用户的请求做如下假设：
+```
+{
+    "Action"     :  "CreateUHostInstance",
+    "Region"     :  "cn-north-01",
+    "ImageId"    :  "f43736e1-65a5-4bea-ad2e-8a46e18883c2",
+    "CPU"        :  2,
+    "Memory"     :  2048,
+    "DiskSpace"  :  10,
+    "LoginMode"  :  "Password",
+    "Password"   :  "VUNsb3VkLmNu",
+    "Name"       :  "Host01",
+    "ChargeType" :  "Month",
+    "Quantity"   :  1,
+    "PublicKey"  :  "ucloudsomeone@example.com1296235120854146120"
+}
+```
+详细的计算过程如下：
+####1.将请求参数按照名进行升序排列
+```
+{
+    "Action"     :  "CreateUHostInstance",
+    "CPU"        :  2,
+    "ChargeType" :  "Month",
+    "DiskSpace"  :  10,
+    "ImageId"    :  "f43736e1-65a5-4bea-ad2e-8a46e18883c2",
+    "LoginMode"  :  "Password",
+    "Memory"     :  2048,
+    "Name"       :  "Host01",
+    "Password"   :  "VUNsb3VkLmNu",
+    "PublicKey"  :  "ucloudsomeone@example.com1296235120854146120",
+    "Quantity"   :  1,
+    "Region"     :  "cn-north-01"
+}
+```
+####2.对排序后的请求参数进行URL编码
+```
+{
+     "Action"     :  "CreateUHostInstance",
+     "CPU"        :  2,
+     "ChargeType" :  "Month",
+     "DiskSpace"  :  10,
+     "ImageId"    :  "f43736e1-65a5-4bea-ad2e-8a46e18883c2",
+     "LoginMode"  :  "Password",
+     "Memory"     :  2048,
+     "Name"       :  "Host01",
+     "Password"   :  "VUNsb3VkLmNu",
+     "PublicKey"  :  "ucloudsomeone%40example.com1296235120854146120",
+     "Quantity"   :  1,
+     "Region"     :  "cn-north-01"
+ }
+```
+####3.构造HTTP请求
+参数名和参数值之间用 “=” 连接，参数和参数之间用”&”号连接，构造的URL请求为:
+```
+http(s)://api.ucloud.cn/?Action=CreateUHostInstance
+&CPU=2
+&ChargeType=Month
+&DiskSpace=10
+&ImageId=f43736e1-65a5-4bea-ad2e-8a46e18883c2
+&LoginMode=Password
+&Memory=2048
+&Name=Host01
+&Password=VUNsb3VkLmNu
+&PublicKey=ucloudsomeone%40example.com1296235120854146120
+&Quantity=1
+&Region=cn-north-01
+```
+####4.构造被签名参数串
+被签名串的构造规则为: 被签名串 = 所有请求参数拼接(无需HTTP转义)。并在本签名串的结尾拼接API密钥的私钥（PrivateKey）。
+```
+ActionCreateUHostInstanceCPU2ChargeTypeMonthDiskSpace10ImageIdf43736e1-65a5-4bea-ad2e-8a46e18883c2LoginModePasswordMemory2048NameHost01PasswordVUNsb3VkLmNuPublicKeyucloudsomeone@example.com1296235120854146120Quantity1Regioncn-north-0146f09bb9fab4f12dfc160dae12273d5332b5debe
+```
+####5.计算签名
+生成被签名串的 SHA1 签名，即是请求参数”Signature”的值。
+按照上述算法，本例中，计算出的Signature为
+```
+ 64e0fe58642b75db052d50fd7380f79e6a0211bd 
+```
+####6.使用签名组合HTTP请求
+将签名参数附在原有请求串的最后面。最终的HTTP请求串为(为了查看方便，我们人为地将参数之间用回车分隔开)
+```
+http(s)://api.ucloud.cn/?Action=CreateUHostInstance
+&CPU=2
+&ChargeType=Month
+&DiskSpace=10
+&ImageId=f43736e1-65a5-4bea-ad2e-8a46e18883c2
+&LoginMode=Password
+&Memory=2048
+&Name=Host01
+&Password=VUNsb3VkLmNu
+&PublicKey=ucloudsomeone%40example.com1296235120854146120
+&Quantity=1
+&Region=cn-north-01
+&Signature=64e0fe58642b75db052d50fd7380f79e6a0211bd
+```
 
- 
+###签名示例代码
+```python
+import hashlib
+import urlparse
+import urllib
+
+def _verfy_ac(private_key, params):
+    items=params.items()
+    # 请求参数串
+    items.sort()
+    # 将参数串排序
+
+    params_data = "";
+    for key, value in items:
+        params_data = params_data + str(key) + str(value)
+    params_data = params_data + private_key
+
+    sign = hashlib.sha1()
+    sign.update(params_data)
+    signature = sign.hexdigest()
+
+    return signature
+    # 生成的Signature值
+```
