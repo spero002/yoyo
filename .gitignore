@@ -2,9 +2,13 @@
 config.py
 *.pyc
 
+#php ignore file
+config.php
+
 # vim ignore file
 # vim temple file, when the file is edited.
 *.swp
 
 # myself back up file
 *.bk
+
