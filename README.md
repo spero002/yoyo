@@ -202,7 +202,7 @@ http(s)://api.ucloud.cn/?Action=CreateUHostInstance
 &Signature=64e0fe58642b75db052d50fd7380f79e6a0211bd
 ```
 
-###签名示例代码
+###附录：签名示例代码
 ```python
 import hashlib
 import urlparse
