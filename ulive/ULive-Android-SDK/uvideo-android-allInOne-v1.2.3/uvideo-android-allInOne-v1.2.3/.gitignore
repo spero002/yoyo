@@ -1,0 +1,12 @@
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
+/library
+/ulive-android-sdk
+ulive-android-example.iml
+/gradle
+gradlew
+gradlew.bat
