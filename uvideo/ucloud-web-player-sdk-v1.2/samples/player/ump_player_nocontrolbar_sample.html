@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>ucloud播放器demo</title>
+    <!--step1，导入所需要的js文件-->
+    <script type="text/javascript" src="http://player.ucloud.com.cn/release/js/ump.player_v1.min.js"></script>
+</head>
+<body>
+    <!--step2，在页面上创建需要输出播放器的的div位置-->
+    <div id="mod_player"></div>
+    <!--step3，加入播放器调用js代码-->
+    <script language="javascript">
+        var player = new ump.Player();
+		var interfaceReady = false;
+
+		//设置播放参数
+        var params = {
+        	//是否自动播放
+			autostart:true,
+			//文件url
+			file:"http://mediademo.ufile.ucloud.com.cn/ucloud_promo_140s.mp4",
+			//"bottom":在底部显示；"none"：不显示控制栏及播放按钮，使用此模式请必须把autostart设置为true；"hide"：不显示控制栏
+			controlbar:"none"
+        };
+
+        //播放器初始化完成之后才能调用其方法
+		player.onInited = function(){
+            //播放状态及数据
+            ump.log("当前影片播放时长："+player.getDuration());
+            ump.log("当前播放时间点（单位秒）:"+player.getPosition());
+            /** player.getState()有以下值
+             * "BUFFERING":缓冲中
+             * "IDLE":空闲状态
+             * "PLAYING":播放中
+             * "PAUSED":暂停
+             */
+            ump.log("当前播放器状态："+player.getState());
+            ump.log("当前播放器音量："+player.getVolume());
+            ump.log("当前是否为全屏："+player.getFullscreen());
+            ump.log("当前是否为静音："+player.getMute());
+			
+            //播放制定url
+             //setTimeout(function(){
+				 //player.load("http://mediademo.ufile.ucloud.com.cn/ucloud_promo_140s.mp4");
+             //},1000);
+            //暂停播放
+            //player.pause();
+            //继续播放
+            //player.play();
+            //搜索到第10秒
+            //player.seek(10);
+            //停止播放
+            //player.stop();
+
+            //设置全屏状态
+            //player.setFullscreen(true);
+            //设置静音
+            //player.setMute(true);
+            //设置音量0-100
+            //player.setVolume(60);
+        };
+
+        //播放器出现错误时
+        player.onError = function(info){
+            if(!info){
+                return;
+            }
+
+            if(info.desc){
+                //显示错误提示给用户即可
+                ump.log("播放器错误提示："+info.desc);
+            }
+        };
+		
+        //创建播放器
+        player.create({
+			//播放器宽度
+			width : 960,
+			//播放器高度
+			height : 540,
+			//填写播放器对应的div id
+			modId : "mod_player",
+			params : params
+        });
+    </script>
+</body>
+</html>

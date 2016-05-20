@@ -1,0 +1,19 @@
+目录说明：
+
+【demos】
+        |--快捷方式live_rtmp_demo(rtmp直播demo快捷方式)
+	|--快捷方式vod_player_demo(点播demo快捷方式)
+	
+【docs】
+	|--UCloud云视频播放器Web SDK参考文档_v1.2.pdf
+	
+【samples】
+	|--live_rtmp
+		|--ump_live_nocontrolbar.html(rtmp直播隐藏控制栏样例)
+		|--ump_player_live_rtmp.html(rtmp直播sdk使用样例)
+		|--ump_player_live_rtmp2.html(rtmp直播sdk使用样例，含播放地址栏)
+		
+	|--player
+		|--ump_player_nocontrolbar_sample.html(点播播放器无UI样例)
+		|--ump_player_sample.html(点播播放器SDK使用样例)
+		|--ump_player_sample_notauto.html(点播播放器非自动播放样例)

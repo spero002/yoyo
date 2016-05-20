@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>ucloud直播播放器一对多播放端调用demo</title>
+    <!--step1，导入所需要的js文件-->
+    <script type="text/javascript" src="http://player.ucloud.com.cn/release/js/ump.player_v1.min.js"></script>
+</head>
+<body>
+    <!--step2，在页面上创建需要输出播放器的的div位置-->
+    <div id="mod_player"></div>
+    <!--step3，加入播放器调用js代码-->
+    <script language="javascript">
+        var player = new ump.Player1vN();
+        var params = {
+			//播放地址
+            playurl:"rtmp://vlive2.rtmp.cdn.ucloud.com.cn/ucloud/livetest",
+			//缓冲区大小，建议2-6秒，数值越小延时越小，但容易发生缓冲
+			buffertime:2,
+			//封面图地址，播放器未开始播放前显示的图片
+			//coverurl:"http://xxx.com/test.swf",
+            //是否为自动播放
+            autostart:true
+        };
+        //添加对初始化完成后的回调
+        player.onInited = function(info) {
+            ump.log("播放器初始化完成!");
+            for(var o in info){
+                ump.log(o+"="+info[o]);
+            }
+
+            /************收到初始化完成得消息后才可调用flash播放器的方法************/
+            //开始播放
+            //player.joinRoom({roomid:"ucloud"});
+
+            //停止播放
+            //player.stop();
+
+            //获取当前播放状态，播放状态请参考player.onState里对应的值
+            //var state = player.getState();
+
+            /************更多调用接口请查看《API文档》**********/
+        };
+        //播放状态通知
+        player.onState = function(info) {
+            if(!info || (info && typeof info.type== undefined)){
+                return;
+            }
+
+            ump.log("播放状态："+info.type);
+
+            switch (info.type){
+                //视频加载中，调用播放接口时触发
+                case "loading":
+                    break;
+                //视频播放中，视频从loading转为可开始播放状态时触发
+                case "playing":
+                    break;
+                //视频停止，一般为视频正常结束、用户手动点击停止按钮或外部调用stop
+                case "stop":
+                    break;
+            }
+        };
+        //播放器错误消息处理
+        player.onError = function(info) {
+            if(!info){
+                return;
+            }
+
+            if(info.type){
+                //不建议针对错误码做处理，用来做统计或定位问题使用
+                ump.log("播放器错误码："+info.type);
+            }
+
+            if(info.desc){
+                //显示错误提示给用户即可
+                ump.log("播放器错误提示："+info.desc);
+            }
+        };
+
+        //用户主动触发的行为消息，通过代码调用的接口不响应此事件
+        player.onUserAction = function(info) {
+            if(!info || (info && typeof info.type== undefined)){
+                return;
+            }
+
+            ump.log("用户主动触发的行为:"+info.type);
+
+            switch (info.type){
+                //点击播放按钮
+                case "playBtnClick":
+                    break;
+                //点击暂停按钮
+                case "pauseBtnClick":
+                    break;
+                //点击全屏按钮
+                case "fullscreen":
+                    break;
+                //点击退出全屏按钮
+                case "normalscreen":
+                    break;
+                //点击静音按钮
+                case "muteBtnClick":
+                    break;
+                //点击取消静音按钮
+                case "unmuteBtnClick":
+                    break;
+                case "volumeChange":
+                    ump.log("变化后的音量"+info.value);
+                    break;
+                default:
+                    ump.log("Unkown user action!");
+            }
+        };
+
+        //创建播放器
+        player.create({
+            width : 800,
+            height : 600,
+            modId : "mod_player",
+            params : params
+        });
+
+        ump.log("创建完成");
+    </script>
+</body>
+</html>
